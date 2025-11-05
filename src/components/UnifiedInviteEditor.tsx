@@ -1,14 +1,12 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { EventConfig } from '../lib/db';
+import { getFormatById } from '../types/formats';
 
 interface UnifiedInviteEditorProps {
   config: EventConfig | null;
   onQrZoneChange: (zone: { x: number; y: number; width: number; height: number }) => void;
   onTextPositionChange: (fieldX: keyof EventConfig, fieldY: keyof EventConfig, x: number, y: number) => void;
 }
-
-const INVITE_CARD_WIDTH = 1050;
-const INVITE_CARD_HEIGHT = 500;
 
 export const UnifiedInviteEditor = ({
   config,
@@ -17,6 +15,14 @@ export const UnifiedInviteEditor = ({
 }: UnifiedInviteEditorProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+
+  const format = config ? getFormatById(config.format_id) : null;
+  const INVITE_CARD_WIDTH = config?.format_id === 'custom' 
+    ? (config.custom_width || format?.width || 1050) 
+    : (format?.width || 1050);
+  const INVITE_CARD_HEIGHT = config?.format_id === 'custom' 
+    ? (config.custom_height || format?.height || 500) 
+    : (format?.height || 500);
 
   const [qrZone, setQrZone] = useState({
     x: config?.qr_zone_x || 700,
@@ -205,13 +211,19 @@ export const UnifiedInviteEditor = ({
   }, [isDraggingQr, isResizingQr, isDraggingGuestName, isDraggingTableName, handleSave]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full max-w-2xl h-96 bg-gray-100 rounded overflow-hidden border-2 border-gray-300"
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-    >
+    <div className="space-y-4">
+      <div
+        ref={containerRef}
+        className="relative w-full bg-gray-100 rounded overflow-hidden border-2 border-gray-300"
+        style={{
+          aspectRatio: `${INVITE_CARD_WIDTH} / ${INVITE_CARD_HEIGHT}`,
+          maxWidth: '600px',
+          maxHeight: '400px'
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
       {config?.background_image_url ? (
         <img ref={imgRef} src={config.background_image_url} alt="Arrière-plan" className="w-full h-full object-cover" />
       ) : (
@@ -272,6 +284,12 @@ export const UnifiedInviteEditor = ({
         onMouseDown={(e) => handleMouseDown(e, 'tableName')}
       >
         Exemple de nom de table
+      </div>
+      </div>
+      
+      <div className="text-sm text-gray-600">
+        Format: {format?.name} ({INVITE_CARD_WIDTH} × {INVITE_CARD_HEIGHT}px)
+        {format?.printWidth && ` - ${format.printWidth} × ${format.printHeight}`}
       </div>
     </div>
   );

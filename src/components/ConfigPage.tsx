@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Upload, Plus, Trash2, Edit2, Palette } from 'lucide-react';
 import { UnifiedInviteEditor } from './UnifiedInviteEditor';
+import { FormatSelector } from './FormatSelector';
 import { eventConfigDB, tablesDB, EventConfig, Table } from '../lib/db';
 
 export const ConfigPage = () => {
@@ -83,6 +84,15 @@ export const ConfigPage = () => {
     }
   }, [config]);
 
+  const handleConfigChange = useCallback(async (newConfig: EventConfig) => {
+    try {
+      await eventConfigDB.update(newConfig.id, newConfig);
+      setConfig(newConfig);
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la configuration :', error);
+    }
+  }, []);
+
   const handleTextColorChange = useCallback(async (field: keyof EventConfig, color: string) => {
     if (!config) return;
 
@@ -142,6 +152,14 @@ export const ConfigPage = () => {
         {/* General Settings */}
         <section className="bg-white rounded-xl shadow-lg p-8 space-y-8">
           <h2 className="text-2xl font-bold text-gray-800 border-b pb-4 mb-6">Paramètres généraux</h2>
+
+          {/* Format Selection */}
+          {config && (
+            <div>
+              <h3 className="text-xl font-semibold text-gray-700 mb-4">Format d'invitation</h3>
+              <FormatSelector config={config} onConfigChange={handleConfigChange} />
+            </div>
+          )}
 
           {/* Background Image */}
           <div>

@@ -3,6 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 export type EventConfig = {
   id: string;
   background_image_url: string | null;
+  format_id: string;
+  custom_width?: number;
+  custom_height?: number;
   qr_zone_x: number;
   qr_zone_y: number;
   qr_zone_width: number;
@@ -41,12 +44,19 @@ export const eventConfigDB = {
   async getOrCreate(): Promise<EventConfig> {
     const storedConfig = localStorage.getItem(LOCAL_STORAGE_KEYS.EVENT_CONFIG);
     if (storedConfig) {
-      return JSON.parse(storedConfig);
+      const config = JSON.parse(storedConfig);
+      // Migration: add format_id if missing
+      if (!config.format_id) {
+        config.format_id = 'id-card';
+        localStorage.setItem(LOCAL_STORAGE_KEYS.EVENT_CONFIG, JSON.stringify(config));
+      }
+      return config;
     }
 
     const newConfig: EventConfig = {
       id: uuidv4(),
       background_image_url: null,
+      format_id: 'id-card',
       qr_zone_x: 700,
       qr_zone_y: 150,
       qr_zone_width: 150,

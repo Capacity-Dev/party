@@ -1,5 +1,6 @@
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { EventConfig, Guest, Table } from '../lib/db';
+import { getFormatById } from '../types/formats';
 
 interface InviteCardProps {
   guest: Guest;
@@ -8,18 +9,18 @@ interface InviteCardProps {
   id: string;
 }
 
-const INVITE_CARD_WIDTH = 1050;
-const INVITE_CARD_HEIGHT = 500;
-
 export const InviteCard = ({ guest, table, config, id }: InviteCardProps) => {
+  const format = getFormatById(config.format_id);
+  const width = config.format_id === 'custom' ? (config.custom_width || format.width) : format.width;
+  const height = config.format_id === 'custom' ? (config.custom_height || format.height) : format.height;
 
   return (
     <div
       id={id}
       className="relative w-full"
       style={{
-        aspectRatio: `${INVITE_CARD_WIDTH} / ${INVITE_CARD_HEIGHT}`,
-        maxWidth: `${INVITE_CARD_WIDTH}px`,
+        aspectRatio: `${width} / ${height}`,
+        maxWidth: `${width}px`,
       }}
     >
       {config.background_image_url ? (
@@ -35,10 +36,10 @@ export const InviteCard = ({ guest, table, config, id }: InviteCardProps) => {
       <div
         className="absolute flex items-center justify-center bg-white rounded-lg shadow-md"
         style={{
-          left: `${(config.qr_zone_x / INVITE_CARD_WIDTH) * 100}%`,
-          top: `${(config.qr_zone_y / INVITE_CARD_HEIGHT) * 100}%`,
-          width: `${(config.qr_zone_width / INVITE_CARD_WIDTH) * 100}%`,
-          height: `${(config.qr_zone_height / INVITE_CARD_HEIGHT) * 100}%`,
+          left: `${(config.qr_zone_x / width) * 100}%`,
+          top: `${(config.qr_zone_y / height) * 100}%`,
+          width: `${(config.qr_zone_width / width) * 100}%`,
+          height: `${(config.qr_zone_height / height) * 100}%`,
           minWidth: '80px',
           minHeight: '80px',
         }}
@@ -54,8 +55,8 @@ export const InviteCard = ({ guest, table, config, id }: InviteCardProps) => {
       <div
         className="absolute p-6"
         style={{
-          left: `${(config.guest_name_x / INVITE_CARD_WIDTH) * 100}%`,
-          top: `${(config.guest_name_y / INVITE_CARD_HEIGHT) * 100}%`,
+          left: `${(config.guest_name_x / width) * 100}%`,
+          top: `${(config.guest_name_y / height) * 100}%`,
           color: config.guest_name_color,
           textShadow: '0 2px 4px rgba(0,0,0,0.3)',
         }}
@@ -66,8 +67,8 @@ export const InviteCard = ({ guest, table, config, id }: InviteCardProps) => {
       <div
         className="absolute p-6"
         style={{
-          left: `${(config.table_name_x / INVITE_CARD_WIDTH) * 100}%`,
-          top: `${(config.table_name_y / INVITE_CARD_HEIGHT) * 100}%`,
+          left: `${(config.table_name_x / width) * 100}%`,
+          top: `${(config.table_name_y / height) * 100}%`,
           color: config.table_name_color,
           textShadow: '0 2px 4px rgba(0,0,0,0.3)',
         }}
