@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Download, FileDown, Eye, Trash2, Filter } from 'lucide-react';
+import { Download, FileDown, Trash2, Filter } from 'lucide-react';
 import { InviteCard } from './InviteCard';
 import { eventConfigDB, tablesDB, guestsDB, EventConfig, Table, Guest } from '../lib/db';
 import { exportInviteAsImage, exportInviteAsPDF, exportGuestsAsCSV, downloadMultipleInvites } from '../lib/export';

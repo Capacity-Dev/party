@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { EventConfig, Guest, Table } from '../lib/db';
 
@@ -13,13 +12,6 @@ const INVITE_CARD_WIDTH = 1050;
 const INVITE_CARD_HEIGHT = 500;
 
 export const InviteCard = ({ guest, table, config, id }: InviteCardProps) => {
-  const qrData = useMemo(() => {
-    try {
-      return JSON.parse(guest.qr_code_data);
-    } catch {
-      return null;
-    }
-  }, [guest.qr_code_data]);
 
   return (
     <div

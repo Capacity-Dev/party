@@ -43,7 +43,7 @@ export const MainPage = () => {
     e.preventDefault();
 
     if (!guestName.trim() || !selectedTableId || !config) {
-      alert('Veuillez saisir le nom de l'invité et sélectionner une table');
+      alert('Veuillez saisir le nom de l\'invité et sélectionner une table');
       return;
     }
 
@@ -66,8 +66,8 @@ export const MainPage = () => {
       setGuestPhone('');
       setPreviewGuest(newGuest);
     } catch (error) {
-      console.error('Erreur lors de l'ajout de l'invité :', error);
-      alert('Échec de l'ajout de l'invité');
+      console.error('Erreur lors de l\'ajout de l\'invité :', error);
+      alert('Échec de l\'ajout de l\'invité');
     }
   };
 
@@ -80,8 +80,8 @@ export const MainPage = () => {
         await exportInviteAsPDF(`invite-${guest.id}`, `invite-${guest.name}.pdf`);
       }
     } catch (error) {
-      console.error('Erreur lors de l'exportation de l'invitation :', error);
-      alert('Échec de l'exportation de l'invitation');
+      console.error('Erreur lors de l\'exportation de l\'invitation :', error);
+      alert('Échec de l\'exportation de l\'invitation');
     } finally {
       setExporting(false);
     }
@@ -94,8 +94,6 @@ export const MainPage = () => {
   if (!config) {
     return <div className="p-6 text-red-500">Configuration introuvable. Veuillez configurer l'événement d'abord.</div>;
   }
-
-  const selectedTable = tables.find(t => t.id === selectedTableId);
   const previewTable = previewGuest ? tables.find(t => t.id === previewGuest.table_id) : undefined;
 
   return (
@@ -201,7 +199,7 @@ export const MainPage = () => {
             ) : (
               <div className="flex items-center justify-center h-96 text-gray-500">
                 {tables.length === 0
-                  ? 'Veuillez créer des tables dans la configuration d'abord'
+                  ? 'Veuillez créer des tables dans la configuration d\'abord'
                   : 'Ajoutez un invité pour prévisualiser son invitation'}
               </div>
             )}

@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import Papa from 'papaparse';
-import { Guest, Table } from './db';
+import { Guest } from './db';
 
 export const exportInviteAsImage = async (elementId: string, fileName: string = 'invite.png') => {
   const element = document.getElementById(elementId);

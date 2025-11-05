@@ -86,7 +86,7 @@ export const QRZoneEditor = ({ imageUrl, onZoneChange, initialZone }: QRZoneEdit
     const deltaX = e.clientX - dragStartMousePos.x;
     const deltaY = e.clientY - dragStartMousePos.y;
 
-    setZone(prev => {
+    setZone(_prev => {
       let newZone = { ...dragStartZone };
 
       if (isDragging) {

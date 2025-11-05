@@ -128,7 +128,7 @@ export const UnifiedInviteEditor = ({
     const deltaY = e.clientY - dragStartMousePos.y;
 
     if (activeElement === 'qr') {
-      setQrZone(prev => {
+      setQrZone(_prev => {
         let newZone = { ...dragStartElementPos };
 
         if (isDraggingQr) {
